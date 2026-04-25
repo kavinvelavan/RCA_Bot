@@ -1,0 +1,118 @@
+[
+  {
+    "input": {
+      "start_time": "2026-04-25T08:10:00.00",
+      "path": "/cat2/kd/account/201/bin",
+      "method": "POST",
+      "correlation_id": "REQ-101",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 401,
+      "duration_request": 120,
+      "status_code": "401",
+      "end_time": "2026-04-25T08:10:01.20",
+      "event": "Gateway rejected request due to missing authentication token"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 401,
+      "error_message": "Unauthorized - missing or invalid auth token",
+      "failure_start_time": "2026-04-25T08:10:00.30",
+      "failure_end_time": "2026-04-25T08:10:01.20",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Gateway auth failure prevents any downstream calls"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T08:11:00.00",
+      "path": "/cat2/kd/account/202/bin",
+      "method": "POST",
+      "correlation_id": "REQ-102",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 403,
+      "duration_request": 95,
+      "status_code": "403",
+      "end_time": "2026-04-25T08:11:00.95",
+      "event": "Gateway denied access - insufficient permissions for resource"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 403,
+      "error_message": "Forbidden - client lacks permission for this endpoint",
+      "failure_start_time": "2026-04-25T08:11:00.20",
+      "failure_end_time": "2026-04-25T08:11:00.95",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Gateway authorization failure halts entire downstream flow"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T08:12:00.00",
+      "path": "/cat2/kd/account/203/bin",
+      "method": "POST",
+      "correlation_id": "REQ-103",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 429,
+      "duration_request": 80,
+      "status_code": "429",
+      "end_time": "2026-04-25T08:12:00.80",
+      "event": "Gateway rate limit exceeded - too many requests from client"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 429,
+      "error_message": "Too Many Requests - rate limit exceeded",
+      "failure_start_time": "2026-04-25T08:12:00.10",
+      "failure_end_time": "2026-04-25T08:12:00.80",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Rate limit enforcement at gateway stops downstream execution"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T08:13:00.00",
+      "path": "/cat2/kd/account/204/bin",
+      "method": "POST",
+      "correlation_id": "REQ-104",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 502,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 450,
+      "status_code": "502",
+      "end_time": "2026-04-25T08:13:04.50",
+      "event": "TDH returned bad gateway response"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "TDH",
+      "error_code": 502,
+      "error_message": "Bad Gateway - TDH upstream connection failed",
+      "failure_start_time": "2026-04-25T08:13:01.50",
+      "failure_end_time": "2026-04-25T08:13:04.50",
+      "impacted_dependencies": ["SEL", "ST"],
+      "reason": "TDH bad gateway response stops sequential downstream flow"
+    }
+  }
+]

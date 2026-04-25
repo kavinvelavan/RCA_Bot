@@ -1,0 +1,51 @@
+{
+  "application": "CAT",
+  "flow_type": "sequential",
+  "description": "Request flows from CAT through the API Gateway and then sequentially to TDH, SEL, and ST. Failure at any stage breaks the entire flow.",
+  "start_point": "CAT",
+  "gateway": "GATEWAY",
+  "sequence": [
+    {
+      "step": 1,
+      "from": "CAT",
+      "to": "GATEWAY",
+      "type": "gateway",
+      "on_failure": {
+        "impact": ["TDH", "SEL", "ST"],
+        "reason": "Gateway failure blocks all downstream services"
+      }
+    },
+    {
+      "step": 2,
+      "from": "GATEWAY",
+      "to": "TDH",
+      "type": "service",
+      "on_failure": {
+        "impact": ["SEL", "ST"],
+        "reason": "TDH failure stops sequential execution, SEL and ST are never invoked"
+      }
+    },
+    {
+      "step": 3,
+      "from": "GATEWAY",
+      "to": "SEL",
+      "type": "service",
+      "on_failure": {
+        "impact": ["ST"],
+        "reason": "SEL failure prevents ST from being called"
+      }
+    },
+    {
+      "step": 4,
+      "from": "GATEWAY",
+      "to": "ST",
+      "type": "service",
+      "on_failure": {
+        "impact": [],
+        "reason": "Final dependency failure, no further downstream steps"
+      }
+    }
+  ],
+  "success_condition": "All steps (GATEWAY → TDH → SEL → ST) must return success for bin_outcome to be SUCCESS",
+  "failure_condition": "Any step failure stops execution and marks bin_outcome as FAILURE"
+}

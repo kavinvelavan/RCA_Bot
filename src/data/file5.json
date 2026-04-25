@@ -1,0 +1,118 @@
+[
+  {
+    "input": {
+      "start_time": "2026-04-25T11:15:00.00",
+      "path": "/cat2/kd/account/501/bin",
+      "method": "POST",
+      "correlation_id": "REQ-401",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 407,
+      "duration_request": 90,
+      "status_code": "407",
+      "end_time": "2026-04-25T11:15:00.90",
+      "event": "Gateway requires proxy authentication"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 407,
+      "error_message": "Proxy Authentication Required - missing proxy credentials",
+      "failure_start_time": "2026-04-25T11:15:00.15",
+      "failure_end_time": "2026-04-25T11:15:00.90",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Proxy auth failure at gateway blocks all routing"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T11:16:00.00",
+      "path": "/cat2/kd/account/502/bin",
+      "method": "POST",
+      "correlation_id": "REQ-402",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 504,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 5000,
+      "status_code": "504",
+      "end_time": "2026-04-25T11:16:05.00",
+      "event": "TDH gateway timeout - upstream not responding"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "TDH",
+      "error_code": 504,
+      "error_message": "Gateway Timeout - TDH upstream did not respond",
+      "failure_start_time": "2026-04-25T11:16:01.50",
+      "failure_end_time": "2026-04-25T11:16:05.00",
+      "impacted_dependencies": ["SEL", "ST"],
+      "reason": "TDH timeout breaks the sequential dependency chain"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T11:17:00.00",
+      "path": "/cat2/kd/account/503/bin",
+      "method": "POST",
+      "correlation_id": "REQ-403",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 500,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 480,
+      "status_code": "500",
+      "end_time": "2026-04-25T11:17:04.80",
+      "event": "SEL encountered null pointer exception during processing"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "SEL",
+      "error_code": 500,
+      "error_message": "Internal Server Error - SEL null pointer exception",
+      "failure_start_time": "2026-04-25T11:17:02.00",
+      "failure_end_time": "2026-04-25T11:17:04.80",
+      "impacted_dependencies": ["ST"],
+      "reason": "SEL runtime exception prevents ST from being called"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T11:18:00.00",
+      "path": "/cat2/kd/account/504/bin",
+      "method": "POST",
+      "correlation_id": "REQ-404",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 200,
+      "st_response_code": 500,
+      "gateway_response_code": 200,
+      "duration_request": 850,
+      "status_code": "500",
+      "end_time": "2026-04-25T11:18:08.50",
+      "event": "ST failed to persist transaction to database"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "ST",
+      "error_code": 500,
+      "error_message": "Internal Server Error - ST database write failure",
+      "failure_start_time": "2026-04-25T11:18:06.00",
+      "failure_end_time": "2026-04-25T11:18:08.50",
+      "impacted_dependencies": [],
+      "reason": "ST DB write failure at the end of the pipeline"
+    }
+  }
+]

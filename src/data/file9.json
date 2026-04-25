@@ -1,0 +1,118 @@
+[
+  {
+    "input": {
+      "start_time": "2026-04-25T15:50:00.00",
+      "path": "/cat2/kd/account/901/bin",
+      "method": "POST",
+      "correlation_id": "REQ-801",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 423,
+      "duration_request": 102,
+      "status_code": "423",
+      "end_time": "2026-04-25T15:50:01.02",
+      "event": "Gateway blocked request - resource locked by another process"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 423,
+      "error_message": "Locked - target resource is locked",
+      "failure_start_time": "2026-04-25T15:50:00.30",
+      "failure_end_time": "2026-04-25T15:50:01.02",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Resource lock at gateway prevents any downstream access"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T15:51:00.00",
+      "path": "/cat2/kd/account/902/bin",
+      "method": "POST",
+      "correlation_id": "REQ-802",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 500,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 390,
+      "status_code": "500",
+      "end_time": "2026-04-25T15:51:03.90",
+      "event": "TDH failed to decrypt customer record"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "TDH",
+      "error_code": 500,
+      "error_message": "Internal Server Error - TDH decryption failure",
+      "failure_start_time": "2026-04-25T15:51:01.80",
+      "failure_end_time": "2026-04-25T15:51:03.90",
+      "impacted_dependencies": ["SEL", "ST"],
+      "reason": "TDH crypto failure prevents enriched data from reaching SEL"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T15:52:00.00",
+      "path": "/cat2/kd/account/903/bin",
+      "method": "POST",
+      "correlation_id": "REQ-803",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 502,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 620,
+      "status_code": "502",
+      "end_time": "2026-04-25T15:52:06.20",
+      "event": "SEL received invalid response from eligibility engine"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "SEL",
+      "error_code": 502,
+      "error_message": "Bad Gateway - SEL eligibility engine returned invalid response",
+      "failure_start_time": "2026-04-25T15:52:03.50",
+      "failure_end_time": "2026-04-25T15:52:06.20",
+      "impacted_dependencies": ["ST"],
+      "reason": "SEL eligibility failure means ST cannot proceed without result"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T15:53:00.00",
+      "path": "/cat2/kd/account/904/bin",
+      "method": "POST",
+      "correlation_id": "REQ-804",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 200,
+      "st_response_code": 503,
+      "gateway_response_code": 200,
+      "duration_request": 1100,
+      "status_code": "503",
+      "end_time": "2026-04-25T15:53:11.00",
+      "event": "ST service scaling event caused brief unavailability"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "ST",
+      "error_code": 503,
+      "error_message": "Service Unavailable - ST auto-scaling in progress",
+      "failure_start_time": "2026-04-25T15:53:08.00",
+      "failure_end_time": "2026-04-25T15:53:11.00",
+      "impacted_dependencies": [],
+      "reason": "ST temporarily unavailable during horizontal scale-out"
+    }
+  }
+]

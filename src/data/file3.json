@@ -1,0 +1,118 @@
+[
+  {
+    "input": {
+      "start_time": "2026-04-25T09:00:00.00",
+      "path": "/cat2/kd/account/301/bin",
+      "method": "POST",
+      "correlation_id": "REQ-201",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 404,
+      "duration_request": 110,
+      "status_code": "404",
+      "end_time": "2026-04-25T09:00:01.10",
+      "event": "Gateway could not resolve the requested route"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 404,
+      "error_message": "Not Found - route not registered at gateway",
+      "failure_start_time": "2026-04-25T09:00:00.25",
+      "failure_end_time": "2026-04-25T09:00:01.10",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Unknown route at gateway, no downstream calls made"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T09:01:00.00",
+      "path": "/cat2/kd/account/302/bin",
+      "method": "POST",
+      "correlation_id": "REQ-202",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 408,
+      "duration_request": 3000,
+      "status_code": "408",
+      "end_time": "2026-04-25T09:01:30.00",
+      "event": "Gateway request timeout before routing"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 408,
+      "error_message": "Request Timeout - client took too long to send request",
+      "failure_start_time": "2026-04-25T09:01:00.00",
+      "failure_end_time": "2026-04-25T09:01:30.00",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Connection timed out at gateway before reaching any downstream"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T09:02:00.00",
+      "path": "/cat2/kd/account/303/bin",
+      "method": "POST",
+      "correlation_id": "REQ-203",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 503,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 520,
+      "status_code": "503",
+      "end_time": "2026-04-25T09:02:05.20",
+      "event": "SEL service temporarily unavailable"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "SEL",
+      "error_code": 503,
+      "error_message": "Service Unavailable - SEL is down for maintenance",
+      "failure_start_time": "2026-04-25T09:02:02.50",
+      "failure_end_time": "2026-04-25T09:02:05.20",
+      "impacted_dependencies": ["ST"],
+      "reason": "SEL outage prevents ST from being invoked"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T09:03:00.00",
+      "path": "/cat2/kd/account/304/bin",
+      "method": "POST",
+      "correlation_id": "REQ-204",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 200,
+      "st_response_code": 504,
+      "gateway_response_code": 200,
+      "duration_request": 8000,
+      "status_code": "504",
+      "end_time": "2026-04-25T09:03:08.00",
+      "event": "ST gateway timeout while processing transaction"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "ST",
+      "error_code": 504,
+      "error_message": "Gateway Timeout - ST upstream did not respond in time",
+      "failure_start_time": "2026-04-25T09:03:06.00",
+      "failure_end_time": "2026-04-25T09:03:08.00",
+      "impacted_dependencies": [],
+      "reason": "ST timeout at final stage, no further dependencies"
+    }
+  }
+]

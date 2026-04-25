@@ -1,0 +1,118 @@
+[
+  {
+    "input": {
+      "start_time": "2026-04-25T13:30:00.00",
+      "path": "/cat2/kd/account/701/bin",
+      "method": "POST",
+      "correlation_id": "REQ-601",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": null,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 406,
+      "duration_request": 88,
+      "status_code": "406",
+      "end_time": "2026-04-25T13:30:00.88",
+      "event": "Gateway cannot produce response matching Accept header"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "GATEWAY",
+      "error_code": 406,
+      "error_message": "Not Acceptable - response format not supported",
+      "failure_start_time": "2026-04-25T13:30:00.20",
+      "failure_end_time": "2026-04-25T13:30:00.88",
+      "impacted_dependencies": ["TDH", "SEL", "ST"],
+      "reason": "Content negotiation failure at gateway stops routing"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T13:31:00.00",
+      "path": "/cat2/kd/account/702/bin",
+      "method": "POST",
+      "correlation_id": "REQ-602",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 422,
+      "sel_response_code": null,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 330,
+      "status_code": "422",
+      "end_time": "2026-04-25T13:31:03.30",
+      "event": "TDH failed schema validation on incoming payload"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "TDH",
+      "error_code": 422,
+      "error_message": "Unprocessable Entity - TDH schema validation failed",
+      "failure_start_time": "2026-04-25T13:31:01.20",
+      "failure_end_time": "2026-04-25T13:31:03.30",
+      "impacted_dependencies": ["SEL", "ST"],
+      "reason": "TDH validation rejection blocks downstream SEL and ST"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T13:32:00.00",
+      "path": "/cat2/kd/account/703/bin",
+      "method": "POST",
+      "correlation_id": "REQ-603",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 500,
+      "st_response_code": null,
+      "gateway_response_code": 200,
+      "duration_request": 560,
+      "status_code": "500",
+      "end_time": "2026-04-25T13:32:05.60",
+      "event": "SEL failed to connect to downstream cache"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "SEL",
+      "error_code": 500,
+      "error_message": "Internal Server Error - SEL cache connection refused",
+      "failure_start_time": "2026-04-25T13:32:02.50",
+      "failure_end_time": "2026-04-25T13:32:05.60",
+      "impacted_dependencies": ["ST"],
+      "reason": "SEL cache failure makes response incomplete, ST skipped"
+    }
+  },
+  {
+    "input": {
+      "start_time": "2026-04-25T13:33:00.00",
+      "path": "/cat2/kd/account/704/bin",
+      "method": "POST",
+      "correlation_id": "REQ-604",
+      "content_type": "service/json;charset=UTF-8",
+      "accept": "service/json;v=2",
+      "bin_outcome": "FAILURE",
+      "tdh_response_code": 200,
+      "sel_response_code": 200,
+      "st_response_code": 500,
+      "gateway_response_code": 200,
+      "duration_request": 780,
+      "status_code": "500",
+      "end_time": "2026-04-25T13:33:07.80",
+      "event": "ST encountered deadlock in transaction processing"
+    },
+    "output": {
+      "application_status": "failed",
+      "failed_dependency": "ST",
+      "error_code": 500,
+      "error_message": "Internal Server Error - ST transaction deadlock",
+      "failure_start_time": "2026-04-25T13:33:05.50",
+      "failure_end_time": "2026-04-25T13:33:07.80",
+      "impacted_dependencies": [],
+      "reason": "ST deadlock at final stage causes transaction rollback"
+    }
+  }
+]
