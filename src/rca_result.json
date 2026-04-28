@@ -1,9 +1,9 @@
 {
-  "failed_dependency": "ST",
-  "error": "500 - Internal Server Error - ST crashed during processing",
-  "failure_window": "2026-04-25T22:05:01.50 to 2026-04-25T22:05:07.10",
+  "failed_dependency": "SEL",
+  "error": "503 - Service Unavailable - SEL is down for maintenance",
+  "failure_window": "2026-04-25T20:00:05.20 to 2026-04-25T20:00:05.40",
   "status": "RESOLVED",
-  "impacted_downstream": "none",
-  "root_cause": "ST crash aborts sequential call chain.",
-  "raw_output": "Failed dependency: ST. Error: 500 - Internal Server Error - ST crashed during processing. Failure window: 2026-04-25T22:05:01.50 to 2026-04-25T22:05:07.10. Status: RESOLVED. Impacted downstream: none. Reason: ST crash aborts sequential call chain."
+  "impacted_downstream": "ST",
+  "root_cause": "SEL outage prevents ST from being invoked.",
+  "raw_output": "Failed dependency: SEL. Error: 503 - Service Unavailable - SEL is down for maintenance. Failure window: 2026-04-25T20:00:05.20 to 2026-04-25T20:00:05.40. Status: RESOLVED. Impacted downstream: ST. Reason: SEL outage prevents ST from being invoked."
 }

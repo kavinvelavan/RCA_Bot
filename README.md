@@ -26,8 +26,14 @@ project/
 ---
 
 ## Setup
+Needed latest version of Python  - 3.12 or > 
+cd src
+python3.12 -m venv venv
 
 ```bash
+
+source venv/bin/activate && pip install -r requirements.txt
+
 pip install -r requirements.txt
 ```
 
@@ -40,7 +46,7 @@ Requires Python 3.10+. GPU recommended but CPU works for this model size.
 Converts your 10 JSON files + flow.json into (input, target) training pairs.
 
 ```bash
-python prepare_dataset.py
+python3.12 prepare_dataset.py
 ```
 
 Output: `training_data.jsonl`
@@ -58,7 +64,7 @@ Each line is:
 ## Step 2 — Fine-Tune the Model
 
 ```bash
-python train.py
+python3.12 train.py
 ```
 
 - Base model: `google/flan-t5-small` (~250M params, runs on CPU/GPU)
