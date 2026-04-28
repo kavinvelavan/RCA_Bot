@@ -6,6 +6,7 @@ Converts the 10 dataset JSON files + flow.json into
 
 Output: training_data.jsonl
 """
+from __future__ import annotations
 
 import json
 import os
