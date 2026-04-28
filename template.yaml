@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: RCA Bot Service - 3-Service Architecture for Root Cause Analysis
+
+Globals:
+  Function:
+    Timeout: 300  # 5 minutes timeout for processing
+    MemorySize: 1024  # 1GB memory for CPU-intensive operations
+    Runtime: python3.10
+    Environment:
+      Variables:
+        OLLAMA_BASE_URL: ""  # Configure if using remote Ollama
+        FAISS_INDEX_PATH: "/tmp/faiss_index"  # Lambda temp directory
+
+Resources:
+  RCABotFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_handler.lambda_handler
+      CodeUri: src/
+      Layers:
+        - !Ref DependenciesLayer
+      Events:
+        RCAApi:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+      Policies:
+        - CloudWatchLogsFullAccess
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: !Sub arn:aws:s3:::${RCADataBucket}/*
+
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: rca-bot-dependencies
+      Description: Dependencies for RCA Bot including ML libraries
+      ContentUri: layer/
+      CompatibleRuntimes:
+        - python3.10
+      LicenseInfo: MIT
+
+  RCADataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub rca-bot-data-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  CloudWatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${RCABotFunction}
+      RetentionInDays: 14
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL for RCA Bot
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  RCABotFunction:
+    Description: RCA Bot Lambda Function ARN
+    Value: !GetAtt RCABotFunction.Arn
+  RCADataBucket:
+    Description: S3 bucket for RCA data storage
+    Value: !Ref RCADataBucket
