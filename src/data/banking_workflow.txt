@@ -1,0 +1,230 @@
+Banking Application Workflow Documentation
+
+Overview
+The banking application consists of multiple microservices that work together to provide comprehensive banking services to customers. This document outlines service dependencies, workflows, and past incidents for root cause analysis purposes.
+
+Service Architecture
+
+1. Payment Service
+The payment service handles all payment processing transactions including transfers, bill payments, and merchant transactions.
+
+Dependencies:
+- Upstream Services: Order Service, User Service
+- Downstream Services: Notification Service, Transaction Service
+- Related Services: Auth Service, Account Service
+
+API Endpoints:
+- /api/payments/process
+- /api/payments/validate
+- /api/payments/history
+- /api/payments/status
+
+2. User Service
+The user service manages customer profiles, authentication, and user preferences.
+
+Dependencies:
+- Upstream Services: Auth Service
+- Downstream Services: Payment Service, Order Service, Account Service
+- Related Services: Notification Service
+
+API Endpoints:
+- /api/users/profile
+- /api/users/preferences
+- /api/users/history
+- /api/users/validate
+
+3. Order Service
+The order service handles customer orders for various banking products and services.
+
+Dependencies:
+- Upstream Services: User Service, Inventory Service
+- Downstream Services: Payment Service, Shipping Service
+- Related Services: Notification Service, Transaction Service
+
+API Endpoints:
+- /api/orders/create
+- /api/orders/status
+- /api/orders/history
+- /api/orders/cancel
+
+4. Auth Service
+The authentication service handles user authentication, authorization, and token management.
+
+Dependencies:
+- Upstream Services: None (Entry point)
+- Downstream Services: User Service, Payment Service, Order Service
+- Related Services: Account Service
+
+API Endpoints:
+- /api/auth/login
+- /api/auth/logout
+- /api/auth/validate
+- /api/auth/refresh
+
+5. Transaction Service
+The transaction service records and manages all financial transactions.
+
+Dependencies:
+- Upstream Services: Payment Service, Order Service
+- Downstream Services: Account Service, Notification Service
+- Related Services: User Service
+
+API Endpoints:
+- /api/transactions/record
+- /api/transactions/history
+- /api/transactions/search
+- /api/transactions/reconcile
+
+6. Account Service
+The account service manages customer accounts, balances, and account information.
+
+Dependencies:
+- Upstream Services: Transaction Service, User Service
+- Downstream Services: Payment Service, Notification Service
+- Related Services: Auth Service
+
+API Endpoints:
+- /api/accounts/balance
+- /api/accounts/statement
+- /api/accounts/transactions
+- /api/accounts/update
+
+7. Notification Service
+The notification service handles all customer communications via email, SMS, and push notifications.
+
+Dependencies:
+- Upstream Services: Payment Service, Transaction Service, Account Service
+- Downstream Services: External Email Gateway, SMS Gateway
+- Related Services: User Service
+
+API Endpoints:
+- /api/notifications/send
+- /api/notifications/history
+- /api/notifications/preferences
+- /api/notifications/status
+
+8. Inventory Service
+The inventory service manages banking product inventory and availability.
+
+Dependencies:
+- Upstream Services: Order Service
+- Downstream Services: Payment Service
+- Related Services: User Service
+
+API Endpoints:
+- /api/inventory/check
+- /api/inventory/update
+- /api/inventory/reserve
+- /api/inventory/release
+
+9. Shipping Service
+The shipping service handles physical document and card shipping for banking products.
+
+Dependencies:
+- Upstream Services: Order Service
+- Downstream Services: External Shipping Partners
+- Related Services: Notification Service
+
+API Endpoints:
+- /api/shipping/calculate
+- /api/shipping/create
+- /api/shipping/track
+- /api/shipping/status
+
+Past Incidents
+
+INC-001: Payment Service Database Connection Timeout
+Date: 2026-04-25T14:30:00Z
+Service: Payment Service
+Error Type: Database Connection Timeout
+Root Cause: Database connection pool exhaustion during peak transaction processing
+Resolution: Increased connection pool size from 10 to 50 connections and implemented connection retry logic with exponential backoff
+Impact: Payment processing was unavailable for 15 minutes, affecting approximately 2,000 transactions
+Duration: 15 minutes
+Severity: High
+
+INC-002: User Service Memory Leak
+Date: 2026-04-23T09:15:00Z
+Service: User Service
+Error Type: Memory Leak
+Root Cause: Unbounded cache growth in user session management causing memory exhaustion
+Resolution: Implemented cache eviction policy with LRU (Least Recently Used) algorithm and added memory monitoring alerts
+Impact: User authentication delays for 2 hours, affecting login performance for all customers
+Duration: 2 hours
+Severity: High
+
+INC-003: Order Service Third-Party API Failure
+Date: 2026-04-20T16:45:00Z
+Service: Order Service
+Error Type: Third-Party API Failure
+Root Cause: Rate limiting on inventory service API due to high volume requests during promotional period
+Resolution: Implemented circuit breaker pattern with retry with exponential backoff and increased inventory service rate limits
+Impact: Order creation failures for 45 minutes, affecting customer ability to place new orders
+Duration: 45 minutes
+Severity: Medium
+
+INC-004: Auth Service Token Generation Issue
+Date: 2026-04-18T11:20:00Z
+Service: Auth Service
+Error Type: Token Generation Failure
+Root Cause: JWT signing key rotation causing temporary mismatch between old and new keys
+Resolution: Implemented gradual key rotation with overlap period and added key validation checks
+Impact: Authentication failures for 30 minutes, requiring users to re-login
+Duration: 30 minutes
+Severity: Medium
+
+INC-005: Transaction Service Database Lock Contention
+Date: 2026-04-15T08:00:00Z
+Service: Transaction Service
+Error Type: Database Lock Contention
+Root Cause: Long-running transactions causing database table locks during end-of-day processing
+Resolution: Optimized database queries and implemented transaction timeout mechanism
+Impact: Transaction processing delays for 1 hour during morning batch processing
+Duration: 1 hour
+Severity: Medium
+
+INC-006: Notification Service Email Gateway Timeout
+Date: 2026-04-12T13:45:00Z
+Service: Notification Service
+Error Type: External Email Gateway Timeout
+Root Cause: Email service provider experiencing outage, affecting SMTP connections
+Resolution: Implemented fallback email provider and added email queue with retry mechanism
+Impact: Email notifications delayed for 3 hours, affecting transaction confirmations and alerts
+Duration: 3 hours
+Severity: Low
+
+INC-007: Account Service Balance Calculation Error
+Date: 2026-04-10T16:30:00Z
+Service: Account Service
+Error Type: Balance Calculation Error
+Root Cause: Floating-point precision issue in interest calculation for certain account types
+Resolution: Updated calculation logic to use decimal arithmetic and added comprehensive test coverage
+Impact: Incorrect balance display for 5% of savings accounts for 2 hours
+Duration: 2 hours
+Severity: High
+
+Service Communication Patterns
+
+Synchronous Communication:
+- Payment Service → Transaction Service (for recording transactions)
+- Order Service → Inventory Service (for checking availability)
+- Auth Service → User Service (for user validation)
+
+Asynchronous Communication:
+- Notification Service → All Services (for sending alerts)
+- Transaction Service → Account Service (for balance updates)
+
+Error Handling Patterns:
+- Circuit Breaker Pattern: Implemented for external service calls
+- Retry with Exponential Backoff: For transient failures
+- Dead Letter Queue: For failed message processing
+- Health Checks: Every 30 seconds between services
+
+Monitoring and Alerting:
+- Response time monitoring for all API endpoints
+- Error rate alerts for each service
+- Database connection pool monitoring
+- Memory and CPU usage alerts
+- External service dependency monitoring
+
+This documentation serves as a primary source for understanding service dependencies and past incidents during root cause analysis activities.
