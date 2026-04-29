@@ -1,0 +1,174 @@
+{
+  "webhook_payload": {
+    "application_name": "payment-service",
+    "timestamp": "2026-04-29T15:06:56.482374Z"
+  },
+  "orchestrator_response": {
+    "application_name": "payment-service",
+    "alert_timestamp": "2026-04-29T15:06:56.482374Z",
+    "dependent_services": [
+      "order-service",
+      "user-service",
+      "notification-service",
+      "transaction-service",
+      "auth-service",
+      "account-service"
+    ],
+    "error_logs": {
+      "payment-service": [
+        {
+          "log_id": "LOG-PAYMENT-SERVICE-001",
+          "service": "payment-service",
+          "timestamp": "2026-04-29T13:06:56.470922Z",
+          "status_code": 500,
+          "error": "Database connection timeout",
+          "url": "/api/payment/service/endpoint1",
+          "level": "ERROR",
+          "message": "payment-service encountered Database connection timeout at 2026-04-29T13:06:56.470922Z",
+          "duration_ms": 100,
+          "request_id": "REQ-0000-000",
+          "user_id": "USER-00000",
+          "ip_address": "192.168.0.0",
+          "user_agent": "Mozilla/5.0 (compatible; RCA-Bot/1.0)"
+        }
+      ],
+      "order-service": [
+        {
+          "log_id": "LOG-ORDER-SERVICE-001",
+          "service": "order-service",
+          "timestamp": "2026-04-29T13:08:56.470922Z",
+          "status_code": 503,
+          "error": "Service unavailable",
+          "url": "/api/order/service/endpoint1",
+          "level": "ERROR",
+          "message": "order-service encountered Service unavailable at 2026-04-29T13:08:56.470922Z",
+          "duration_ms": 200,
+          "request_id": "REQ-0001-000",
+          "user_id": "USER-00001",
+          "ip_address": "192.168.1.0",
+          "user_agent": "Mozilla/5.0 (compatible; RCA-Bot/1.0)"
+        }
+      ],
+      "user-service": [
+        {
+          "log_id": "LOG-USER-SERVICE-001",
+          "service": "user-service",
+          "timestamp": "2026-04-29T13:10:56.470922Z",
+          "status_code": 500,
+          "error": "Database connection timeout",
+          "url": "/api/user/service/endpoint1",
+          "level": "ERROR",
+          "message": "user-service encountered Database connection timeout at 2026-04-29T13:10:56.470922Z",
+          "duration_ms": 150,
+          "request_id": "REQ-0002-000",
+          "user_id": "USER-00002",
+          "ip_address": "192.168.2.0",
+          "user_agent": "Mozilla/5.0 (compatible; RCA-Bot/1.0)"
+        }
+      ]
+    },
+    "processed_at": "2026-04-29T15:06:56.482374Z",
+    "failed_services": [
+      {
+        "service_name": "payment-service",
+        "error_code": "500",
+        "error_message": "Database connection timeout",
+        "timestamp": "2026-04-29T13:06:56.470922Z"
+      },
+      {
+        "service_name": "order-service",
+        "error_code": "503",
+        "error_message": "Service unavailable",
+        "timestamp": "2026-04-29T13:08:56.470922Z"
+      },
+      {
+        "service_name": "user-service",
+        "error_code": "500",
+        "error_message": "Database connection timeout",
+        "timestamp": "2026-04-29T13:10:56.470922Z"
+      }
+    ],
+    "service_hierarchy": [
+      {
+        "service_name": "payment-service",
+        "status": "FAILED",
+        "error_count": 5
+      },
+      {
+        "service_name": "order-service",
+        "status": "FAILED",
+        "error_count": 3
+      },
+      {
+        "service_name": "user-service",
+        "status": "FAILED",
+        "error_count": 4
+      },
+      {
+        "service_name": "notification-service",
+        "status": "HEALTHY",
+        "error_count": 0
+      },
+      {
+        "service_name": "transaction-service",
+        "status": "HEALTHY",
+        "error_count": 0
+      },
+      {
+        "service_name": "auth-service",
+        "status": "HEALTHY",
+        "error_count": 0
+      },
+      {
+        "service_name": "account-service",
+        "status": "HEALTHY",
+        "error_count": 0
+      }
+    ]
+  },
+  "rca_analysis": {
+    "service_name": "payment-service",
+    "analysis_timestamp": "2026-04-29T15:06:56.482374Z",
+    "service_dependencies": {
+      "upstream_services": ["order-service", "user-service"],
+      "downstream_services": ["notification-service", "transaction-service"],
+      "related_services": ["auth-service", "account-service"]
+    },
+    "error_summary": {
+      "total_errors": 5,
+      "error_code": 500,
+      "severity": "High",
+      "error_start_time": "2026-04-28T21:40:00Z"
+    },
+    "root_cause_analysis": {
+      "cause": "Database connection timeout affecting multiple services",
+      "pattern": "Database connectivity issues causing cascade failures",
+      "business_impact": "Payment processing unavailable, affecting user transactions",
+      "impacted_dependencies": ["order-service", "user-service"],
+      "affected_endpoints": ["/api/payment/service/endpoint1", "/api/order/service/endpoint1"]
+    },
+    "recommended_actions": [
+      "Restart database connection pool",
+      "Check database server health",
+      "Implement connection retry logic",
+      "Monitor service recovery"
+    ],
+    "ongoing_errors": [
+      {
+        "service": "payment-service",
+        "timestamp": "2026-04-29T13:06:56.470922Z",
+        "error": "Database connection timeout",
+        "status_code": 500,
+        "url": "/api/payment/service/endpoint1",
+        "severity": "High"
+      }
+    ],
+    "past_incidents": [
+      {
+        "incident_id": "INC-001",
+        "error_type": "Database connection timeout",
+        "resolution": "Increased connection pool size and added connection retry logic"
+      }
+    ]
+  }
+}

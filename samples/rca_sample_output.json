@@ -1,0 +1,53 @@
+{
+  "service_name": "payment-service",
+  "analysis_timestamp": "2026-04-29T15:06:56.482374Z",
+  "service_dependencies": {
+    "upstream_services": [
+      "order-service",
+      "user-service"
+    ],
+    "downstream_services": [
+      "notification-service",
+      "transaction-service"
+    ],
+    "related_services": [
+      "auth-service",
+      "account-service"
+    ]
+  },
+  "error_summary": {
+    "total_errors": 5,
+    "error_code": 500,
+    "severity": "High",
+    "error_start_time": "2026-04-28T21:40:00Z"
+  },
+  "root_cause_analysis": {
+    "cause": "Service failure detected - requires investigation",
+    "pattern": "Intermittent service failures detected",
+    "business_impact": "Service degradation affecting user experience",
+    "impacted_dependencies": [
+      "unknown"
+    ],
+    "affected_endpoints": [
+      "/unknown"
+    ]
+  },
+  "recommended_actions": [
+    "Restart affected service",
+    "Check logs for detailed error information",
+    "Monitor service health"
+  ],
+  "ongoing_errors": [],
+  "past_incidents": [
+    {
+      "incident_id": "INC-001",
+      "error_type": "Database connection timeout",
+      "resolution": "Increased connection pool size and added connection retry logic"
+    },
+    {
+      "incident_id": "INC-002",
+      "error_type": "Memory leak",
+      "resolution": "Implemented cache eviction policy and memory monitoring"
+    }
+  ]
+}
